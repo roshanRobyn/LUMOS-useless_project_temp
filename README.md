@@ -2,96 +2,74 @@
 
 
 
-# [Project Name] 🎯
+# LUMOS 🎯
 
 
 ## Basic Details
-### Team Name: [Name]
+### Team Name: SeveralSnape
 
 
 ### Team Members
-- Team Lead: [Name] - [College]
-- Member 2: [Name] - [College]
-- Member 3: [Name] - [College]
+- Team Lead: Roshan Robin - ASIET, Kalady
+- Member 2: Jayalakshmy Jayakrishnan - ASIET, Kalady
 
 ### Project Description
-[2-3 lines about what your project does]
+Our project finds out whether an average KTU student is able to study outside in the moonlight when KSEB cuts the power. We take time, location, moon cycle, and weather conditions to see if we should depend on nature before on the state electricity board.
 
 ### The Problem (that doesn't exist)
-[What ridiculous problem are you solving?]
-
+Have you ever came home late from your college with a ton of assignments and record to complete only to find theres no electricity at home. Well, Before you call KSEB to complain you should remember "Where there is a will there is a way". Maybe KSEB is not the issue. Maybe we are being too quick to call KSEB before thinking of other options.
 ### The Solution (that nobody asked for)
-[How are you solving it? Keep it fun!]
-
+We have made Lumos especially for those poor KTU students with no inverter at home. We take the moon cycle and weather conditions to see if there is enough moonlight at the user's location for them to do their work on the terrace. We also measure the wind speed to ensure that the user knows how breezy the terrace is. This is to ensure that our average KTU student is not affected by the KSEB power cuts.
 ## Technical Details
 ### Technologies/Components Used
 For Software:
-- [Languages used]
-- [Frameworks used]
-- [Libraries used]
-- [Tools used]
-
-For Hardware:
-- [List main components]
-- [List specifications]
-- [List tools required]
+- HTML5, CSS, JavaScript
+- Suncalc
+- OpenMeteo
 
 ### Implementation
-For Software:
+For Software: 
 # Installation
-[commands]
+Standalone HTML file just download and open.
 
 # Run
-[commands]
+Standalone HTML file just download and open.
 
 ### Project Documentation
 For Software:
 
-# Screenshots (Add at least 3)
-![Screenshot1](Add screenshot 1 here with proper name)
-*Add caption explaining what this shows*
+# Screenshots 
+Initial Screen
+<img width="1078" height="693" alt="image" src="https://github.com/user-attachments/assets/30fdf846-bb9d-4f89-b3f2-b09f87504224" />
 
-![Screenshot2](Add screenshot 2 here with proper name)
-*Add caption explaining what this shows*
+*The "Current Poyii?" button asks permission to use location and time data from the browser*
 
-![Screenshot3](Add screenshot 3 here with proper name)
-*Add caption explaining what this shows*
+Output
+<img width="997" height="671" alt="image" src="https://github.com/user-attachments/assets/7543c0a8-7c64-4d39-ba45-09ea01b271d2" />
+
+*The output shows whether or not the KTU student can study on the terrace with enough light and wind and if not the option to call KSEB.*
+
+Moon-Eater
+<img width="732" height="646" alt="image" src="https://github.com/user-attachments/assets/c8f24816-9ccc-4a03-a834-ccb131c920fa" />
+
+*While we deliberate and procrastinate on calling the KSEB or just plain waiting for the power to come back play a little mini-game*
 
 # Diagrams
-![Workflow](Add your workflow/architecture diagram here)
-*Add caption explaining your workflow*
+<img width="1647" height="944" alt="image (2)" src="https://github.com/user-attachments/assets/34a91165-e24d-4441-91c8-1c072f03225a" />
 
-For Hardware:
-
-# Schematic & Circuit
-![Circuit](Add your circuit diagram here)
-*Add caption explaining connections*
-
-![Schematic](Add your schematic diagram here)
-*Add caption explaining the schematic*
-
-# Build Photos
-![Components](Add photo of your components here)
-*List out all components shown*
-
-![Build](Add photos of build process here)
-*Explain the build steps*
-
-![Final](Add photo of final product here)
-*Explain the final build*
+*Uses Location and time to find out moon cycle and weather conditions, and then use them to calculate whether ther is enough light or lux value for the student to study in. Also provides the mini-game and UI features *
 
 ### Project Demo
 # Video
-[Add your demo video link here]
-*Explain what the video demonstrates*
+[https://drive.google.com/file/d/1J2PPIXWqaeCzpGiCuqkfquL5QnN8s-xd/view?usp=sharing](https://drive.google.com/file/d/1G2VgwioMmXazCV7ZT41arcEyauyweZDG/view?usp=sharing)
+*The video shows the initial fetch of the location and time from the user and then uses them to calculate the lux values to find out whether the student can study or call KSEB*
 
 # Additional Demos
-[Add any extra demo materials/links]
-
+https://stalwart-gaufre-89adb2.netlify.app
+*deployed link*
 ## Team Contributions
-- [Name 1]: [Specific contributions]
-- [Name 2]: [Specific contributions]
-- [Name 3]: [Specific contributions]
+- Jayalakshmy Jayakrishnan: Final product and UI
+- Roshan Robin: Initial Work and Documentation
 
 ---
 Made with ❤️ at TinkerHub Useless Projects 
