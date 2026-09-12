@@ -76,11 +76,18 @@ Browser Location + Current Time
                   │ CALL KSEB          │
                   └────────────────────┘
 ```
-# Run
-Standalone HTML file just download and open.
+## Run
 
-### Project Documentation
-For Software:
+```bash
+# 1. Clone the repository
+git clone [https://github.com/SeveralSnape/Lumos.git](https://github.com/SeveralSnape/Lumos.git)
+
+# 2. Navigate to the project directory
+cd Lumos
+
+# 3. Launch the application
+# Open index.html directly in your web browser
+```
 
 # Screenshots 
 Initial Screen
