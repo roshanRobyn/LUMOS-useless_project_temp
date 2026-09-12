@@ -40,7 +40,7 @@ We have made Lumos especially for those poor KTU students with no inverter at ho
 
 ## Software Implementation
 
-Lumos is implemented as a **standalone client-side web application**. There is no dedicated backend server.
+Lumos is implemented as a **standalone client-side web application**. 
 
 ### Pipeline Architecture
 
