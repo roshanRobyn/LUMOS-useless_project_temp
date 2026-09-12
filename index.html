@@ -1,1 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LUMEN | Natural Infrastructure (Auto-Dynamic)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.9.0/suncalc.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'VT323', monospace;
+            color: #e0e6ed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transition: background 1s ease;
+        }
 
+        /* Dynamic Theme Classes applied via JavaScript */
+        body.theme-night {
+            background-color: #1b1b32;
+        }
+
+        body.theme-day {
+            background-color: #2b2d42;
+            background-image: linear-gradient(to bottom, #1d3557, #457b9d, #e07a5f);
+        }
+
+        /* Twinkling Star Layers (Night Only) */
+        .star-layer {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 0;
+            display: none;
+        }
+        body.theme-night .star-layer { display: block; }
+
+        .stars-1 {
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(252, 238, 167, 0.8) 2px, transparent 3px),
+                radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.6) 2px, transparent 3px),
+                radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0.6) 2px, transparent 3px);
+            background-size: 300px 300px;
+            animation: twinkle 3s infinite alternate;
+        }
+
+        .stars-2 {
+            background-image: 
+                radial-gradient(circle at 25% 20%, rgba(252, 238, 167, 0.8) 3px, transparent 4px),
+                radial-gradient(circle at 75% 60%, rgba(252, 238, 167, 0.8) 3px, transparent 4px),
+                radial-gradient(circle at 40% 10%, rgba(255, 255, 255, 0.4) 2px, transparent 3px);
+            background-size: 250px 250px;
+            animation: twinkle 2s infinite alternate-reverse;
+        }
+
+        .stars-3 {
+            background-image: 
+                radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.8) 2px, transparent 3px),
+                radial-gradient(circle at 10% 20%, rgba(252, 238, 167, 0.5) 2px, transparent 3px),
+                radial-gradient(circle at 60% 40%, rgba(255, 255, 255, 0.7) 1px, transparent 2px);
+            background-size: 400px 400px;
+            animation: twinkle 4s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.2; }
+            100% { opacity: 1; }
+        }
+
+        /* Celestial Bodies */
+        .celestial-body {
+            position: absolute;
+            top: 10%;
+            left: calc(50% - 75px);
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            z-index: 1;
+            transition: all 0.5s ease;
+        }
+
+        /* Night Moon */
+        body.theme-night .celestial-body {
+            background: transparent;
+            box-shadow: 40px -20px 0px 0px #fceea7;
+        }
+
+        /* Day Sun */
+        body.theme-day .celestial-body {
+            background: #ffb703;
+            box-shadow: 0 0 50px 20px rgba(255, 183, 3, 0.5), inset -10px -10px 0px rgba(251, 133, 0, 0.5);
+            width: 120px;
+            height: 120px;
+            left: calc(50% - 60px);
+        }
+
+        /* Pixelated Rain Canvas */
+        #rain-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            display: none;
+        }
+
+        /* Pixelated Clouds Silhouette */
+        .silhouette-layer {
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 40vh;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        svg.clouds {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Retro UI Overlay */
+        .ui-container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 4px solid;
+            box-shadow: 8px 8px 0px #0a0a14;
+            padding: 25px 15px;
+            backdrop-filter: blur(4px);
+            max-height: 90vh;
+            overflow-y: auto;
+            transition: background 0.5s ease, border-color 0.5s ease;
+        }
+
+        body.theme-night .ui-container {
+            background: rgba(27, 27, 50, 0.9);
+            border-color: #4a4e69;
+        }
+
+        body.theme-day .ui-container {
+            background: rgba(29, 53, 87, 0.85);
+            border-color: #f4a261;
+        }
+
+        .main-text {
+            font-size: 2.2rem;
+            line-height: 1.1;
+            margin: 0 0 1rem 0;
+            color: #ffffff;
+            text-shadow: 2px 2px 0px #000;
+        }
+
+        .sub-text {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            transition: color 0.5s ease;
+        }
+        body.theme-night .sub-text { color: #9ba4b5; }
+        body.theme-day .sub-text { color: #f4a261; }
+
+        .action-btn {
+            border: 4px solid #ffffff;
+            color: #ffffff;
+            font-family: 'VT323', monospace;
+            font-size: 1.4rem;
+            padding: 10px 20px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 4px 4px 0px #0a0a14;
+            transition: all 0.1s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        body.theme-night .action-btn { background: #4a4e69; }
+        body.theme-night .action-btn:hover { background: #5c6285; }
+
+        body.theme-day .action-btn { background: #e76f51; }
+        body.theme-day .action-btn:hover { background: #f4a261; }
+
+        .action-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px #0a0a14;
+        }
+
+        .call-kseb {
+            background: #a33b3b !important;
+            border-color: #ff9e9e !important;
+            margin-top: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .call-kseb:hover { background: #c24b4b !important; }
+
+        .game-trigger-btn {
+            background: #2d6a4f !important;
+            border-color: #52b788 !important;
+            margin-top: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .game-trigger-btn:hover { background: #40916c !important; }
+
+        /* Results Dashboard */
+        .dashboard {
+            display: none;
+            width: 100%;
+            box-sizing: border-box;
+            animation: fadeIn 0.5s ease forwards;
+            text-align: left;
+        }
+
+        .metrics {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 4px dashed;
+            transition: border-color 0.5s ease;
+        }
+        body.theme-night .metrics { border-color: #4a4e69; }
+        body.theme-day .metrics { border-color: #f4a261; }
+
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .metric-label {
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+            transition: color 0.5s ease;
+        }
+        body.theme-night .metric-label { color: #fceea7; }
+        body.theme-day .metric-label { color: #f4a261; }
+
+        .metric-value {
+            font-size: 1.4rem;
+            color: #ffffff;
+        }
+
+        .verdict-line {
+            font-size: 1.15rem;
+            line-height: 1.3;
+            margin-bottom: 10px;
+            color: #e0e6ed;
+        }
+
+        /* Minigame Modal / Container styles */
+        #game-overlay {
+            display: none;
+            width: 100%;
+            text-align: center;
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        .game-stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 300px;
+            margin: 0 auto 5px auto;
+            font-size: 1.2rem;
+            transition: color 0.5s ease;
+        }
+        body.theme-night .game-stats-bar { color: #fceea7; }
+        body.theme-day .game-stats-bar { color: #f4a261; }
+
+        #gameCanvas {
+            background: #0d0d1a;
+            border: 4px solid;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+            display: block;
+            margin: 5px auto;
+            max-width: 100%;
+            transition: border-color 0.5s ease;
+        }
+        body.theme-night #gameCanvas { border-color: #fceea7; }
+        body.theme-day #gameCanvas { border-color: #f4a261; }
+
+        .controls-hint {
+            font-size: 1rem;
+            margin-top: 2px;
+            transition: color 0.5s ease;
+        }
+        body.theme-night .controls-hint { color: #9ba4b5; }
+        body.theme-day .controls-hint { color: #f4a261; }
+
+        .mobile-dpad {
+            display: grid;
+            grid-template-columns: repeat(3, 50px);
+            grid-gap: 5px;
+            justify-content: center;
+            margin-top: 8px;
+        }
+
+        .dpad-btn {
+            border: 2px solid #fff;
+            color: #fff;
+            font-family: 'VT323', monospace;
+            font-size: 1.4rem;
+            height: 42px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        body.theme-night .dpad-btn { background: #4a4e69; }
+        body.theme-day .dpad-btn { background: #457b9d; }
+        .dpad-btn:active { background: #fceea7; color: #000; }
+
+        /* Game Over Screen Overlay */
+        #game-over-screen {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 20;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            transition: background 0.5s ease;
+        }
+        body.theme-night #game-over-screen { background: rgba(13, 13, 26, 0.95); }
+        body.theme-day #game-over-screen { background: rgba(29, 53, 87, 0.95); }
+
+        .game-over-title {
+            font-size: 2.5rem;
+            color: #ff6b6b;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 0px #000;
+        }
+
+        .game-over-msg {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            line-height: 1.4;
+            transition: color 0.5s ease;
+        }
+        body.theme-night .game-over-msg { color: #fceea7; }
+        body.theme-day .game-over-msg { color: #f4a261; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            .ui-container { padding: 20px 10px; }
+            .main-text { font-size: 1.6rem; }
+            .sub-text { font-size: 1rem; }
+            .metric-value { font-size: 1.2rem; }
+            .verdict-line { font-size: 1rem; }
+            .celestial-body {
+                width: 100px;
+                height: 100px;
+                left: calc(50% - 50px);
+            }
+            body.theme-day .celestial-body {
+                width: 90px;
+                height: 90px;
+                left: calc(50% - 45px);
+            }
+        }
+    </style>
+</head>
+<body class="theme-night">
+    
+    <!-- Audio Elements -->
+    <audio id="audio-click" preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="audio-ambient" loop preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2414/2414-preview.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Twinkling Stars (Active at night) -->
+    <div class="star-layer stars-1"></div>
+    <div class="star-layer stars-2"></div>
+    <div class="star-layer stars-3"></div>
+
+    <!-- Dynamic Celestial Body (Moon or Sun) -->
+    <div class="celestial-body"></div>
+
+    <!-- Pixelated Rain Canvas -->
+    <canvas id="rain-canvas"></canvas>
+
+    <!-- Pixelated Cloud Silhouette Layer -->
+    <div class="silhouette-layer">
+        <svg class="clouds" viewBox="0 0 1200 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <g class="cloud-bg" fill="#272744">
+                <rect x="0" y="250" width="200" height="50" />
+                <rect x="50" y="200" width="100" height="50" />
+                <rect x="250" y="220" width="150" height="80" />
+                <rect x="300" y="170" width="80" height="50" />
+                <rect x="500" y="280" width="300" height="120" />
+                <rect x="550" y="230" width="200" height="50" />
+                <rect x="850" y="200" width="250" height="100" />
+                <rect x="900" y="150" width="150" height="50" />
+                <rect x="0" y="300" width="1200" height="100" />
+            </g>
+            <g class="cloud-fg" fill="#37395a">
+                <rect x="100" y="320" width="250" height="80" />
+                <rect x="150" y="280" width="150" height="40" />
+                <rect x="650" y="300" width="350" height="100" />
+                <rect x="750" y="250" width="150" height="50" />
+            </g>
+        </svg>
+    </div>
+
+    <!-- Retro UI Overlay -->
+    <div class="ui-container">
+        
+        <!-- Game Over Screen Overlay -->
+        <div id="game-over-screen">
+            <div class="game-over-title">DEFEATED!</div>
+            <div class="game-over-msg" id="game-over-message-text">CAUGHT BY SHOVEL KNIGHT! Final Score: 0.</div>
+            <button class="action-btn" onclick="restartGameFromOverlay()">PLAY AGAIN</button>
+            <button class="action-btn" style="margin-top:10px;" onclick="returnToDashboard()">EXIT TO MENU</button>
+        </div>
+
+        <div id="initial-view">
+            <h2 class="main-text">Is the electricity out in your locality?</h2>
+            <p class="sub-text">Maybe before calling the KSEB operator, we should see if we can adjust.</p>
+            <button id="poyiBtn" class="action-btn">Current Poyii??</button>
+        </div>
+
+        <div id="dashboard" class="dashboard">
+            <div class="metrics">
+                <div class="metric-item">
+                    <span class="metric-label" id="metric-1-label">LUNAR</span>
+                    <span class="metric-value" id="val-primary">--%</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">CLOUD</span>
+                    <span class="metric-value" id="val-cloud">--%</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">RAIN</span>
+                    <span class="metric-value" id="val-rain">--mm</span>
+                </div>
+            </div>
+            <div class="verdict-line" id="verdict-visibility"></div>
+            <div class="verdict-line" id="verdict-comfort"></div>
+            
+            <a href="tel:1912" id="kseb-btn" class="action-btn call-kseb" style="display: none;">CALL KSEB (1912)</a>
+            <button id="launchGameBtn" class="action-btn game-trigger-btn">PLAY MOON-EATER 🎮</button>
+        </div>
+
+        <!-- Minigame Section -->
+        <div id="game-overlay">
+            <div class="game-stats-bar">
+                <div>SCORE: <span id="game-score">0</span></div>
+                <div id="game-lives">❤️❤️❤️</div>
+            </div>
+            <canvas id="gameCanvas" width="300" height="260"></canvas>
+            <div class="controls-hint">Avoid Meteors & Shovel Knight! Catch Stars & Moons!</div>
+            
+            <div class="mobile-dpad">
+                <div></div>
+                <button class="dpad-btn" onclick="setPlayerDir(0, -1)">▲</button>
+                <div></div>
+                <button class="dpad-btn" onclick="setPlayerDir(-1, 0)">◀</button>
+                <button class="dpad-btn" onclick="setPlayerDir(0, 1)">▼</button>
+                <button class="dpad-btn" onclick="setPlayerDir(1, 0)">▶</button>
+            </div>
+            <button class="action-btn" style="margin-top:8px; font-size:1.1rem; padding:4px 15px;" onclick="closeGame()">EXIT GAME</button>
+        </div>
+    </div>
+
+    <script>
+        const btn = document.getElementById('poyiBtn');
+        const initView = document.getElementById('initial-view');
+        const dashboard = document.getElementById('dashboard');
+        const ksebBtn = document.getElementById('kseb-btn');
+        const launchGameBtn = document.getElementById('launchGameBtn');
+        const gameOverlay = document.getElementById('game-overlay');
+        const gameOverScreen = document.getElementById('game-over-screen');
+        
+        const clickSound = document.getElementById('audio-click');
+        const ambientSound = document.getElementById('audio-ambient');
+        ambientSound.volume = 0.4;
+        
+        let isDaytime = false;
+        let loadingInterval;
+
+        // Automatically detect Day vs Night on load (Day = 6:00 to 18:00)
+        function checkTimeAndApplyTheme() {
+            const currentHour = new Date().getHours();
+            isDaytime = currentHour >= 6 && currentHour < 18;
+
+            if (isDaytime) {
+                document.body.className = 'theme-day';
+                document.querySelector('.cloud-bg').setAttribute('fill', '#1d3557');
+                document.querySelector('.cloud-fg').setAttribute('fill', '#457b9d');
+                document.getElementById('metric-1-label').innerText = "SOLAR LUX";
+            } else {
+                document.body.className = 'theme-night';
+                document.querySelector('.cloud-bg').setAttribute('fill', '#272744');
+                document.querySelector('.cloud-fg').setAttribute('fill', '#37395a');
+                document.getElementById('metric-1-label').innerText = "LUNAR";
+            }
+        }
+        checkTimeAndApplyTheme();
+
+        // Pixel Rain Setup
+        const canvas = document.getElementById('rain-canvas');
+        const ctx = canvas.getContext('2d');
+        let raindrops = [];
+
+        function initRain() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            raindrops = [];
+            const count = Math.floor(window.innerWidth / 15);
+            for (let i = 0; i < count; i++) {
+                raindrops.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    length: Math.random() * 20 + 10,
+                    speed: Math.random() * 8 + 6
+                });
+            }
+        }
+
+        function drawPixelRain() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(135, 206, 250, 0.6)';
+            raindrops.forEach(drop => {
+                ctx.fillRect(Math.floor(drop.x), Math.floor(drop.y), 3, drop.length);
+                drop.y += drop.speed;
+                if (drop.y > canvas.height) {
+                    drop.y = -20;
+                    drop.x = Math.random() * canvas.width;
+                }
+            });
+            requestAnimationFrame(drawPixelRain);
+        }
+
+        window.addEventListener('resize', () => {
+            if (canvas.style.display === 'block') initRain();
+        });
+
+        const scanIcons = isDaytime ? ['🌅', '☀️', '🌤️', '⛅'] : ['🌑', '🌒', '🌓', '🌔', '🌕'];
+
+        btn.addEventListener('click', () => {
+            clickSound.currentTime = 0;
+            clickSound.play().catch(e => {});
+            ambientSound.play().catch(e => {});
+
+            let phaseIdx = 0;
+            btn.style.width = btn.offsetWidth + "px"; 
+            
+            loadingInterval = setInterval(() => {
+                btn.innerText = `SCANNING ${scanIcons[phaseIdx]}`;
+                phaseIdx = (phaseIdx + 1) % scanIcons.length;
+            }, 150);
+
+            setTimeout(() => {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (pos) => fetchNatureData(pos.coords.latitude, pos.coords.longitude),
+                        () => fetchNatureData(10.1667, 76.4333) 
+                    );
+                } else {
+                    fetchNatureData(10.1667, 76.4333);
+                }
+            }, 1200); 
+        });
+
+        async function fetchNatureData(lat, lon) {
+            try {
+                const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=cloud_cover,wind_speed_10m,precipitation`;
+                const response = await fetch(weatherUrl);
+                const data = await response.json();
+                
+                const cloudCover = data.current.cloud_cover;
+                const windKph = data.current.wind_speed_10m;
+                const precipitation = data.current.precipitation;
+                
+                clearInterval(loadingInterval);
+
+                let vVis, vCom, requireKseb = false;
+
+                if (isDaytime) {
+                    // Daytime / Solar Calculations
+                    const sunPos = SunCalc.getPosition(new Date(), lat, lon);
+                    let baseLux = Math.max(0, Math.sin(sunPos.altitude) * 100000);
+                    const effectiveSolarLux = Math.round(baseLux * (1 - (cloudCover / 100)));
+
+                    document.getElementById('val-primary').innerText = `${Math.max(500, effectiveSolarLux)} lux`;
+
+                    if (precipitation > 0) {
+                        canvas.style.display = 'block';
+                        initRain();
+                        drawPixelRain();
+                        vVis = `> DAY HAZARD: ${precipitation}mm rain! Books are getting soaked indoors/outdoors. Call KSEB.`;
+                        requireKseb = true;
+                    } else if (effectiveSolarLux < 1000 || cloudCover > 90) {
+                        vVis = `> ERROR: Overcast daylight (${cloudCover}% clouds). Too dim to study. Call KSEB.`;
+                        requireKseb = true;
+                    } else {
+                        vVis = `> STATUS: Daylight is optimal (${effectiveSolarLux} lux). Stop looking at screens and study!`;
+                    }
+                } else {
+                    // Nighttime / Lunar Calculations
+                    const moon = SunCalc.getMoonIllumination(new Date());
+                    const moonIllumination = Math.round(moon.fraction * 100); 
+                    const effectiveLux = moonIllumination * (1 - (cloudCover / 100));
+
+                    document.getElementById('val-primary').innerText = `${moonIllumination}%`;
+
+                    if (precipitation > 0) {
+                        canvas.style.display = 'block';
+                        initRain();
+                        drawPixelRain();
+                        vVis = `> NIGHT HAZARD: ${precipitation}mm rain! Terrace flooding imminent. Evacuate immediately.`;
+                        requireKseb = true;
+                    } else if (effectiveLux < 10 || cloudCover > 85) {
+                        vVis = `> ERROR: Pitch black night (${cloudCover}% clouds). Total darkness. Call KSEB.`;
+                        requireKseb = true;
+                    } else {
+                        vVis = `> STATUS: Clear moonlight (${moonIllumination}%). Proceed to the terrace. No excuses!`;
+                    }
+                }
+
+                document.getElementById('val-cloud').innerText = `${cloudCover}%`;
+                document.getElementById('val-rain').innerText = `${precipitation}mm`;
+
+                if (windKph <= 2) {
+                    vCom = `> CONDITIONS: Dead air (${windKph}km/h). Expect heavy sweating and mosquito attacks.`;
+                } else {
+                    vCom = `> CONDITIONS: Breeze active at ${windKph}km/h. Tolerable study environment.`;
+                }
+
+                document.getElementById('verdict-visibility').innerText = vVis;
+                document.getElementById('verdict-comfort').innerText = vCom;
+
+                if (requireKseb) {
+                    ksebBtn.style.display = 'inline-block';
+                }
+
+                initView.style.display = 'none';
+                dashboard.style.display = 'block';
+
+            } catch (error) {
+                clearInterval(loadingInterval);
+                btn.innerText = "SYS ERROR";
+            }
+        }
+
+        // --- RETRO SOUND SYNTHESIZER FOR GAME ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'collect') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+            } else if (type === 'hit') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(50, audioCtx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            }
+        }
+
+        // --- MOON-EATER MINIGAME LOGIC ---
+        const gCanvas = document.getElementById('gameCanvas');
+        const gCtx = gCanvas.getContext('2d');
+        let gameInterval;
+        let score = 0;
+        let lives = 3;
+        let invulnerableTimer = 0;
+        
+        let player = { x: 150, y: 130, dx: 0, dy: 0, speed: 3.5 };
+        let shovelKnight = { x: 50, y: 50, speed: 1.8 };
+        let collectibles = [];
+        let meteorites = [];
+
+        launchGameBtn.addEventListener('click', () => {
+            clickSound.currentTime = 0;
+            clickSound.play().catch(e => {});
+            dashboard.querySelector('.metrics').style.display = 'none';
+            document.getElementById('verdict-visibility').style.display = 'none';
+            document.getElementById('verdict-comfort').style.display = 'none';
+            ksebBtn.style.display = 'none';
+            launchGameBtn.style.display = 'none';
+            
+            gameOverlay.style.display = 'block';
+            startMoonEaterGame();
+        });
+
+        function closeGame() {
+            clearInterval(gameInterval);
+            gameOverlay.style.display = 'none';
+            gameOverScreen.style.display = 'none';
+            dashboard.querySelector('.metrics').style.display = 'flex';
+            document.getElementById('verdict-visibility').style.display = 'block';
+            document.getElementById('verdict-comfort').style.display = 'block';
+            if(document.getElementById('val-rain').innerText !== '0mm') {
+                ksebBtn.style.display = 'inline-block';
+            }
+            launchGameBtn.style.display = 'inline-block';
+        }
+
+        function startMoonEaterGame() {
+            score = 0;
+            lives = 3;
+            updateLivesDisplay();
+            document.getElementById('game-score').innerText = score;
+            player = { x: 150, y: 130, dx: 0, dy: 0, speed: 3.5 };
+            shovelKnight = { x: 40, y: 40, speed: 1.8 };
+            collectibles = [];
+            meteorites = [];
+            gameOverScreen.style.display = 'none';
+
+            spawnCollectible('star');
+            spawnCollectible('moon');
+            spawnCollectible('star');
+
+            for(let i = 0; i < 4; i++) {
+                spawnMeteorite();
+            }
+
+            if(gameInterval) clearInterval(gameInterval);
+            gameInterval = setInterval(updateGame, 1000 / 30);
+        }
+
+        function restartGameFromOverlay() {
+            startMoonEaterGame();
+        }
+
+        function returnToDashboard() {
+            clearInterval(gameInterval);
+            gameOverScreen.style.display = 'none';
+            gameOverlay.style.display = 'none';
+            dashboard.querySelector('.metrics').style.display = 'flex';
+            document.getElementById('verdict-visibility').style.display = 'block';
+            document.getElementById('verdict-comfort').style.display = 'block';
+            if(document.getElementById('val-rain').innerText !== '0mm') {
+                ksebBtn.style.display = 'inline-block';
+            }
+            launchGameBtn.style.display = 'inline-block';
+        }
+
+        function triggerGameOver() {
+            clearInterval(gameInterval);
+            document.getElementById('game-over-message-text').innerText = `CAUGHT BY SHOVEL KNIGHT! Final Score: ${score}.`;
+            gameOverScreen.style.display = 'flex';
+        }
+
+        function updateLivesDisplay() {
+            let hearts = '❤️'.repeat(Math.max(0, lives));
+            document.getElementById('game-lives').innerText = hearts;
+        }
+
+        function spawnCollectible(forcedType) {
+            let type = forcedType || (Math.random() > 0.5 ? 'star' : 'moon');
+            collectibles.push({
+                type: type,
+                x: Math.random() * (gCanvas.width - 40) + 20,
+                y: Math.random() * (gCanvas.height - 40) + 20,
+                dx: (Math.random() - 0.5) * 2,
+                dy: (Math.random() - 0.5) * 2,
+                size: 14
+            });
+        }
+
+        function spawnMeteorite() {
+            meteorites.push({
+                x: Math.random() > 0.5 ? -20 : gCanvas.width + 20,
+                y: Math.random() * gCanvas.height,
+                dx: (Math.random() * 2.5 + 2) * (Math.random() > 0.5 ? 1 : -1),
+                dy: (Math.random() * 2.5 + 2) * (Math.random() > 0.5 ? 1 : -1),
+                size: 16
+            });
+        }
+
+        function setPlayerDir(x, y) {
+            player.dx = x * player.speed;
+            player.dy = y * player.speed;
+        }
+
+        window.addEventListener('keydown', e => {
+            if(gameOverlay.style.display === 'block' && gameOverScreen.style.display !== 'flex') {
+                if(e.key === 'ArrowUp') setPlayerDir(0, -1);
+                if(e.key === 'ArrowDown') setPlayerDir(0, 1);
+                if(e.key === 'ArrowLeft') setPlayerDir(-1, 0);
+                if(e.key === 'ArrowRight') setPlayerDir(1, 0);
+            }
+        });
+
+        // 1. Render Alien Cat Character
+        function drawAlienCat(ctx, x, y) {
+            ctx.fillStyle = '#52b788'; 
+            ctx.fillRect(x - 12, y - 8, 24, 18);
+            ctx.fillRect(x - 10, y - 14, 6, 8); 
+            ctx.fillRect(x + 4, y - 14, 6, 8);  
+            
+            ctx.fillStyle = '#fceea7';
+            ctx.fillRect(x - 8, y - 12, 2, 4);
+            ctx.fillRect(x + 6, y - 12, 2, 4);
+
+            ctx.fillStyle = '#2d6a4f';
+            ctx.fillRect(x - 4, y - 20, 2, 6);
+            ctx.fillRect(x + 2, y - 20, 2, 6);
+            ctx.fillStyle = '#fceea7';
+            ctx.fillRect(x - 5, y - 22, 4, 3);
+            ctx.fillRect(x + 1, y - 22, 4, 3);
+
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(x - 7, y - 3, 4, 5);
+            ctx.fillRect(x + 3, y - 3, 4, 5);
+            ctx.fillStyle = '#fceea7';
+            ctx.fillRect(x - 11, y, 3, 3);
+            ctx.fillRect(x + 8, y, 3, 3);
+            ctx.fillStyle = '#1b1b32';
+            ctx.fillRect(x - 3, y + 2, 6, 2);
+
+            ctx.fillStyle = '#fceea7';
+            ctx.fillRect(x - 2, y + 6, 4, 4);
+        }
+
+        // 2. Render Shovel Knight Enemy
+        function drawShovelKnight(ctx, x, y) {
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(x - 14, y - 16, 28, 30);
+
+            ctx.fillStyle = '#ffb703';
+            ctx.fillRect(x - 12, y - 14, 6, 8);
+            ctx.fillRect(x + 6, y - 14, 6, 8);
+            ctx.fillRect(x - 14, y - 10, 4, 6);
+            ctx.fillRect(x + 10, y - 10, 4, 6);
+
+            ctx.fillStyle = '#48cae4';
+            ctx.fillRect(x - 9, y - 10, 18, 20);
+            ctx.fillStyle = '#0077b6'; 
+            ctx.fillRect(x - 7, y - 2, 14, 12);
+
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(x - 5, y - 6, 10, 3);
+
+            ctx.fillStyle = '#7f5539'; 
+            ctx.fillRect(x - 14, y + 4, 26, 3);
+            ctx.fillStyle = '#ade8f4'; 
+            ctx.fillRect(x + 10, y + 1, 8, 8);
+            ctx.fillStyle = '#00b4d8';
+            ctx.fillRect(x + 14, y + 3, 3, 4);
+        }
+
+        // 3. Render Golden Star
+        function drawGoldenStar(ctx, x, y) {
+            ctx.fillStyle = '#000000'; 
+            ctx.fillRect(x - 8, y - 8, 16, 16);
+            ctx.fillStyle = '#ffb703'; 
+            ctx.fillRect(x - 6, y - 6, 12, 12);
+            ctx.fillStyle = '#ffe169';
+            ctx.fillRect(x - 6, y - 6, 6, 6);
+            ctx.fillStyle = '#fb8500';
+            ctx.fillRect(x, y, 6, 6);
+        }
+
+        // 4. Render Cratered Moon
+        function drawCrateredMoon(ctx, x, y) {
+            ctx.fillStyle = '#000000'; 
+            ctx.fillRect(x - 9, y - 9, 18, 18);
+            ctx.fillStyle = '#adb5bd'; 
+            ctx.fillRect(x - 7, y - 7, 14, 14);
+            ctx.fillStyle = '#495057';
+            ctx.fillRect(x - 4, y - 4, 4, 4);
+            ctx.fillRect(x + 2, y + 1, 3, 3);
+            ctx.fillRect(x - 3, y + 3, 3, 2);
+            ctx.fillStyle = '#ced4da';
+            ctx.fillRect(x - 5, y - 5, 3, 3);
+        }
+
+        // 5. Render Flaming Meteorite
+        function drawFlamingMeteorite(ctx, x, y) {
+            ctx.fillStyle = '#d90429';
+            ctx.fillRect(x - 14, y - 4, 10, 8);
+            ctx.fillStyle = '#ff7b00';
+            ctx.fillRect(x - 12, y - 2, 8, 4);
+            ctx.fillStyle = '#ffb703';
+            ctx.fillRect(x - 8, y - 1, 4, 2);
+
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(x - 8, y - 8, 16, 16);
+            ctx.fillStyle = '#6f1d1b'; 
+            ctx.fillRect(x - 6, y - 6, 12, 12);
+            ctx.fillStyle = '#1b1b32';
+            ctx.fillRect(x - 4, y - 3, 3, 3);
+            ctx.fillRect(x + 1, y + 2, 3, 3);
+        }
+
+        function updateGame() {
+            if (invulnerableTimer > 0) invulnerableTimer--;
+
+            player.x += player.dx;
+            player.y += player.dy;
+
+            if(player.x < 15) player.x = 15;
+            if(player.x > gCanvas.width - 15) player.x = gCanvas.width - 15;
+            if(player.y < 15) player.y = 15;
+            if(player.y > gCanvas.height - 15) player.y = gCanvas.height - 15;
+
+            let angleToPlayer = Math.atan2(player.y - shovelKnight.y, player.x - shovelKnight.x);
+            shovelKnight.x += Math.cos(angleToPlayer) * shovelKnight.speed;
+            shovelKnight.y += Math.sin(angleToPlayer) * shovelKnight.speed;
+
+            let distKnight = Math.hypot(player.x - shovelKnight.x, player.y - shovelKnight.y);
+            if(distKnight < 18 && invulnerableTimer === 0) {
+                lives--;
+                updateLivesDisplay();
+                playSound('hit');
+                invulnerableTimer = 45;
+
+                if(lives <= 0) {
+                    triggerGameOver();
+                    return;
+                }
+            }
+
+            collectibles.forEach(item => {
+                item.x += item.dx;
+                item.y += item.dy;
+                if(item.x < 15 || item.x > gCanvas.width - 15) item.dx *= -1;
+                if(item.y < 15 || item.y > gCanvas.height - 15) item.dy *= -1;
+            });
+
+            meteorites.forEach(met => {
+                met.x += met.dx;
+                met.y += met.dy;
+
+                if(met.x < 10 || met.x > gCanvas.width - 10) met.dx *= -1;
+                if(met.y < 10 || met.y > gCanvas.height - 10) met.dy *= -1;
+
+                let dist = Math.hypot(player.x - met.x, player.y - met.y);
+                if(dist < 16 && invulnerableTimer === 0) {
+                    lives--;
+                    updateLivesDisplay();
+                    playSound('hit');
+                    invulnerableTimer = 45;
+
+                    if(lives <= 0) {
+                        triggerGameOver();
+                        return;
+                    }
+                }
+            });
+
+            collectibles.forEach((item, index) => {
+                let dist = Math.hypot(player.x - item.x, player.y - item.y);
+                if(dist < 18) {
+                    score += item.type === 'star' ? 15 : 10;
+                    document.getElementById('game-score').innerText = score;
+                    playSound('collect');
+                    collectibles.splice(index, 1);
+                    spawnCollectible();
+
+                    if(score % 30 === 0) {
+                        spawnMeteorite();
+                        shovelKnight.speed += 0.15;
+                    }
+                }
+            });
+
+            gCtx.fillStyle = '#0d0d1a';
+            gCtx.fillRect(0, 0, gCanvas.width, gCanvas.height);
+
+            collectibles.forEach(item => {
+                if (item.type === 'star') {
+                    drawGoldenStar(gCtx, item.x, item.y);
+                } else {
+                    drawCrateredMoon(gCtx, item.x, item.y);
+                }
+            });
+
+            meteorites.forEach(met => {
+                drawFlamingMeteorite(gCtx, met.x, met.y);
+            });
+
+            drawShovelKnight(gCtx, shovelKnight.x, shovelKnight.y);
+
+            if (invulnerableTimer % 4 < 2) {
+                drawAlienCat(gCtx, player.x, player.y);
+            }
+        }
+    </script>
+</body>
+</html>
